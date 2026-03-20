@@ -4,6 +4,50 @@ A terminal UI for browsing and managing [Claude Code](https://claude.ai/code) an
 
 Navigate projects and sessions, search by content, view token usage and tool calls, rename and delete sessions — all from the terminal.
 
+## Screenshots
+
+**Projects view** — lists all projects grouped by working directory, with session count, total size and last-modified date.
+
+```
+╭─────────────────────────────────────────────────────────────────────────────╮
+│  CSM - Session Manager [Claude]                                             │
+│  # │ Project                              │ Sessions │   Size │ Date        │
+│ ─────────────────────────────────────────────────────────────────────────── │
+│  1   ~/.claude-mem/observer-sessions              82   34.7MB   2026-03-20  │
+│> 2   ~/data/work/ai/sessions/csm                   3    1.4MB   2026-03-20  │
+│  3   ~/.agents                                     2   187KB    2026-03-20  │
+│  4   ~/data/work/ai                                9   10.7MB   2026-03-19  │
+╰─────────────────────────────────────────────────────────────────────────────╯
+4 projects
+[↑↓] Navigate  [Enter] Open  [d] Delete  [q/Esc] Quit
+```
+
+**Sessions view** — lists all sessions in the selected project with ID, slug, date, message count and token usage (input ↑ / output ↓).
+
+```
+╭─────────────────────────────────────────────────────────────────────────────╮
+│  CSM - Sessions: ~/data/work/ai/sessions/csm [Claude]                       │
+│  # │ ID       │ Slug                          │ Date       │ Msgs │ ↑in │ ↓out │
+│ ─────────────────────────────────────────────────────────────────────────── │
+│> 1   92a92fd6   jolly-wandering-kitten           2026-03-20    80   5.2k   115  │
+│  2   fce45034   jolly-wandering-kitten           2026-03-20   189   1.5k   1.0k │
+│  3   00a2754b   dapper-questing-willow           2026-03-19    66    411    204  │
+╰─────────────────────────────────────────────────────────────────────────────╯
+3 sessions
+[↑↓] Navigate  [Enter] Detail  [d] Delete  [/] Filter  [Space] Preview  [Esc/b] Back  [q] Quit
+```
+
+## Features
+
+- **Two providers** — Claude Code (`~/.claude/projects/`) and OpenAI Codex (`~/.codex/sessions/`), switchable via `--source`
+- **Project view** — groups sessions by working directory; shows session count, total file size, last-modified date
+- **Session list** — shows slug/title, date, message count, input/output token estimates
+- **Detail view** — accurate token counts (tiktoken), tool call statistics, changed file list, message preview
+- **Search & filter** — `/` to enter filter mode, fuzzy-matches slug and message content
+- **Batch delete** — filter + `Space` to select multiple sessions, `d` to delete all at once
+- **Rename** — `r` in detail view to rename a session (writes `custom-title` record for Claude, updates `session_index.jsonl` for Codex)
+- **Provider badge** — `[Claude]` or `[Codex]` shown in every view's title bar
+
 ## Requirements
 
 - [Bun](https://bun.com) v1.3+
@@ -11,15 +55,17 @@ Navigate projects and sessions, search by content, view token usage and tool cal
 ## Install & Run
 
 ```bash
+git clone https://github.com/borneygit/csm
+cd csm
 bun install
-bun run dev                        # run directly (re-run to pick up changes)
-bun run dev -- --source codex      # Codex mode
+bun run dev                        # Claude Code sessions (default)
+bun run dev -- --source codex      # OpenAI Codex sessions
 ```
 
-## Build
+## Build standalone binary
 
 ```bash
-bun run build                      # compiles to ./csm standalone binary
+bun run build                      # compiles to ./csm
 ./csm                              # Claude Code sessions (default)
 ./csm --source codex               # OpenAI Codex sessions
 ./csm --path /custom/dir           # custom projects directory
@@ -45,6 +91,7 @@ The active provider is shown as `[Claude]` or `[Codex]` in the title bar of ever
 | Projects / List | `Enter` | Open |
 | Projects / List | `d` | Delete (prompts confirmation) |
 | List | `/` | Toggle search filter |
+| List | `Space` | Preview first message |
 | List (filter) | `Space` | Toggle selection |
 | List (filter) | `d` | Delete selected sessions |
 | Detail | `r` | Rename session |
@@ -73,5 +120,5 @@ src/
 ## Tech Stack
 
 - [Ink](https://github.com/vadimdemedes/ink) — React for CLIs
-- [js-tiktoken](https://github.com/dqbd/tiktoken) — token counting (`cl100k_base`)
+- [js-tiktoken](https://github.com/dqbd/tiktoken) — accurate token counting (`cl100k_base`)
 - [Bun](https://bun.com) — runtime and bundler
