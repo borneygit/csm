@@ -8,34 +8,11 @@ Navigate projects and sessions, search by content, view token usage and tool cal
 
 **Projects view** — lists all projects grouped by working directory, with session count, total size and last-modified date.
 
-```
-╭─────────────────────────────────────────────────────────────────────────────╮
-│  CSM - Session Manager [Claude]                                             │
-│  # │ Project                              │ Sessions │   Size │ Date        │
-│ ─────────────────────────────────────────────────────────────────────────── │
-│  1   ~/.claude-mem/observer-sessions              82   34.7MB   2026-03-20  │
-│> 2   ~/data/work/ai/sessions/csm                   3    1.4MB   2026-03-20  │
-│  3   ~/.agents                                     2   187KB    2026-03-20  │
-│  4   ~/data/work/ai                                9   10.7MB   2026-03-19  │
-╰─────────────────────────────────────────────────────────────────────────────╯
-4 projects
-[↑↓] Navigate  [Enter] Open  [d] Delete  [q/Esc] Quit
-```
+![Projects view](assets/projects.png)
 
 **Sessions view** — lists all sessions in the selected project with ID, slug, date, message count and token usage (input ↑ / output ↓).
 
-```
-╭─────────────────────────────────────────────────────────────────────────────╮
-│  CSM - Sessions: ~/data/work/ai/sessions/csm [Claude]                       │
-│  # │ ID       │ Slug                          │ Date       │ Msgs │ ↑in │ ↓out │
-│ ─────────────────────────────────────────────────────────────────────────── │
-│> 1   92a92fd6   jolly-wandering-kitten           2026-03-20    80   5.2k   115  │
-│  2   fce45034   jolly-wandering-kitten           2026-03-20   189   1.5k   1.0k │
-│  3   00a2754b   dapper-questing-willow           2026-03-19    66    411    204  │
-╰─────────────────────────────────────────────────────────────────────────────╯
-3 sessions
-[↑↓] Navigate  [Enter] Detail  [d] Delete  [/] Filter  [Space] Preview  [Esc/b] Back  [q] Quit
-```
+![Sessions view](assets/sessions.png)
 
 ## Features
 
