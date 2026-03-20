@@ -10,7 +10,7 @@ CSM (Claude Session Manager) is a terminal UI tool for browsing and managing Cla
 
 ```bash
 bun install          # Install dependencies
-bun run dev          # Run development (with hot reload)
+bun run dev          # Run directly (no hot reload; re-run manually to pick up changes)
 bun run build        # Compile to standalone binary: ./csm
 ./csm                # Run compiled binary
 ./csm --path /custom # Use custom Claude projects directory
@@ -59,6 +59,19 @@ Session files are newline-delimited JSON. Each line has a `type` field:
 
 - Messages: first 10 only (`messages.slice(0, 10)`)
 - Files changed: first 20 only (`filesChangedSet` capped at 20)
+
+## Key Bindings
+
+| View | Key | Action |
+|------|-----|--------|
+| All | `q` / `Esc` | Quit / go back |
+| Projects / List | `↑` `↓` | Navigate |
+| Projects / List | `Enter` | Open |
+| Projects / List | `d` | Delete (prompts confirmation) |
+| List | `/` | Toggle search filter |
+| List (filter) | `Space` | Toggle selection |
+| List (filter) | `d` | Delete selected sessions |
+| Detail | `r` | Rename session |
 
 ## stubs/
 

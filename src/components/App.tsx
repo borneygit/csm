@@ -1,20 +1,18 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Box, Text, useInput, useApp } from 'ink';
-import { scanProjects, scanProject, getBaseDir } from '../scanner.ts';
-import { parseDetail } from '../parser.ts';
-import * as path from 'path';
 import { ProjectView } from './ProjectView.tsx';
 import { ListView } from './ListView.tsx';
 import { DetailView } from './DetailView.tsx';
 import { StatusBar } from './StatusBar.tsx';
 import type { ProjectMeta, SessionMeta, SessionDetail, ViewMode } from '../types.ts';
-import * as fs from 'fs';
+import type { IProvider } from '../providers/IProvider.ts';
 
 interface AppProps {
-  claudeDir?: string;
+  provider: IProvider;
+  source: 'claude' | 'codex';
 }
 
-export function App({ claudeDir }: AppProps) {
+export function App({ provider, source }: AppProps) {
   const { exit } = useApp();
 
   const [projects, setProjects] = useState<ProjectMeta[]>([]);
@@ -37,7 +35,7 @@ export function App({ claudeDir }: AppProps) {
 
   // Load projects on mount
   useEffect(() => {
-    const loaded = scanProjects(claudeDir);
+    const loaded = provider.scanProjects();
     setProjects(loaded);
     setLoading(false);
   }, []);
@@ -61,23 +59,23 @@ export function App({ claudeDir }: AppProps) {
   const handleEnterProject = useCallback(() => {
     const project = projects[projectIndex];
     if (!project) return;
-    const loaded = scanProject(project.dirName, claudeDir);
+    const loaded = provider.scanProject(project.dirName);
     setAllSessions(loaded);
     setSessions(loaded);
     setSessionIndex(0);
     setFilterText('');
     setIsFiltering(false);
     setView('list');
-  }, [projects, projectIndex, claudeDir]);
+  }, [projects, projectIndex, provider]);
 
   const handleEnterSession = useCallback(() => {
     if (sessions.length === 0) return;
     const session = sessions[sessionIndex];
     if (!session) return;
-    const d = parseDetail(session.filePath);
+    const d = provider.getDetail(session.filePath);
     setDetail(d);
     setView('detail');
-  }, [sessions, sessionIndex]);
+  }, [sessions, sessionIndex, provider]);
 
   const handleSelectionToggle = useCallback((id: string) => {
     setSelectedIds(prev => {
@@ -111,43 +109,7 @@ export function App({ claudeDir }: AppProps) {
   const handleRename = useCallback((newSlug: string) => {
     if (!detail) return;
     try {
-      const content = fs.readFileSync(detail.filePath, 'utf-8');
-      const lines = content.split('\n').filter(l => l.trim());
-
-      // Check if any line has custom-title type
-      const hasCustomTitle = lines.some(line => {
-        try {
-          const obj = JSON.parse(line);
-          return obj.type === 'custom-title';
-        } catch { return false; }
-      });
-
-      const trailing = content.endsWith('\n') ? '' : '\n';
-
-      if (hasCustomTitle) {
-        // Append a new custom-title record (same format as Claude Code's /rename)
-        const newRecord = JSON.stringify({ type: 'custom-title', customTitle: newSlug, sessionId: detail.id }) + '\n';
-        fs.writeFileSync(detail.filePath, content + trailing + newRecord, 'utf-8');
-      } else {
-        // Update slug field in the first line that has it
-        let updated = false;
-        const newLines = lines.map(line => {
-          if (updated) return line;
-          const replaced = line.replace(
-            /"slug"\s*:\s*"((?:[^"\\]|\\.)*)"/,
-            `"slug":${JSON.stringify(newSlug)}`
-          );
-          if (replaced !== line) { updated = true; return replaced; }
-          return line;
-        });
-        if (updated) {
-          fs.writeFileSync(detail.filePath, newLines.join('\n') + '\n', 'utf-8');
-        } else {
-          // No slug field exists — append a new line
-          fs.writeFileSync(detail.filePath, content + trailing + JSON.stringify({ type: 'summary', sessionId: detail.id, slug: newSlug }) + '\n', 'utf-8');
-        }
-      }
-
+      provider.renameSession(detail, newSlug);
       setDetail(prev => prev ? { ...prev, slug: newSlug } : prev);
       setAllSessions(prev => prev.map(s => s.id === detail.id ? { ...s, slug: newSlug } : s));
       setStatusMessage(`Renamed to: ${newSlug}`);
@@ -156,7 +118,7 @@ export function App({ claudeDir }: AppProps) {
       setStatusMessage(`Rename failed: ${e}`);
       setTimeout(() => setStatusMessage(''), 2000);
     }
-  }, [detail]);
+  }, [detail, provider]);
 
   const isFilterActive = filterText !== '' && !isFiltering;
 
@@ -176,9 +138,8 @@ export function App({ claudeDir }: AppProps) {
   const handleDeleteProjectConfirm = useCallback(() => {
     const project = projects[projectIndex];
     if (!project) return;
-    const dirPath = path.join(getBaseDir(claudeDir), project.dirName);
     try {
-      fs.rmSync(dirPath, { recursive: true });
+      provider.deleteProject(project);
       setStatusMessage(`Deleted project: ${project.path}`);
     } catch (e) {
       setStatusMessage(`Delete failed: ${e}`);
@@ -188,7 +149,7 @@ export function App({ claudeDir }: AppProps) {
     setProjectIndex(prev => Math.max(0, Math.min(prev, newProjects.length - 1)));
     setConfirmDelete(false);
     setTimeout(() => setStatusMessage(''), 2000);
-  }, [projects, projectIndex, claudeDir]);
+  }, [projects, projectIndex, provider]);
 
   const handleDeleteConfirm = useCallback(() => {
     // Batch delete in filter state
@@ -196,7 +157,7 @@ export function App({ claudeDir }: AppProps) {
       const count = selectedIds.size;
       for (const id of selectedIds) {
         const s = allSessions.find(x => x.id === id);
-        if (s) try { fs.unlinkSync(s.filePath); } catch {}
+        if (s) try { provider.deleteSession(s); } catch {}
       }
       const newAll = allSessions.filter(s => !selectedIds.has(s.id));
       setAllSessions(newAll);
@@ -212,7 +173,7 @@ export function App({ claudeDir }: AppProps) {
     if (!session) return;
 
     try {
-      fs.unlinkSync(session.filePath);
+      provider.deleteSession(session);
       setStatusMessage(`Deleted: ${session.slug}`);
     } catch (e) {
       setStatusMessage(`Delete failed: ${e}`);
@@ -236,7 +197,7 @@ export function App({ claudeDir }: AppProps) {
     setConfirmDelete(false);
     setSessionIndex(prev => Math.max(0, Math.min(prev, newAll.length - 1)));
     setTimeout(() => setStatusMessage(''), 2000);
-  }, [sessions, sessionIndex, view, detail, allSessions, isFilterActive, selectedIds]);
+  }, [sessions, sessionIndex, view, detail, allSessions, isFilterActive, selectedIds, provider]);
 
   // Global key handler
   useInput((input, key) => {
@@ -267,6 +228,7 @@ export function App({ claudeDir }: AppProps) {
         <ProjectView
           projects={projects}
           selectedIndex={projectIndex}
+          source={source}
           onSelect={setProjectIndex}
           onEnter={handleEnterProject}
           onDelete={handleDeleteRequest}
@@ -298,6 +260,7 @@ export function App({ claudeDir }: AppProps) {
           selectedIds={selectedIds}
           onSelectionToggle={handleSelectionToggle}
           onClearFilter={handleClearFilter}
+          source={source}
         />
       )}
 
@@ -305,6 +268,7 @@ export function App({ claudeDir }: AppProps) {
         detail
           ? <DetailView
               detail={detail}
+              source={source}
               onBack={handleBackToList}
               onDelete={handleDeleteRequest}
               onRename={handleRename}

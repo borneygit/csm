@@ -4,6 +4,7 @@ export interface ProjectMeta {
   sessionCount: number;
   totalSize: number;
   lastModified: Date;
+  source?: 'claude' | 'codex';
 }
 
 export interface SessionMeta {
@@ -18,6 +19,7 @@ export interface SessionMeta {
   searchText: string;
   inputTokens: number;
   outputTokens: number;
+  source?: 'claude' | 'codex';
 }
 
 export interface MessagePreview {

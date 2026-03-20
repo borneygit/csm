@@ -5,6 +5,7 @@ import type { ProjectMeta } from '../types.ts';
 interface ProjectViewProps {
   projects: ProjectMeta[];
   selectedIndex: number;
+  source: 'claude' | 'codex';
   onSelect: (index: number) => void;
   onEnter: () => void;
   onDelete: () => void;
@@ -29,7 +30,7 @@ function truncate(s: string, maxLen: number): string {
   return '…' + s.slice(-(maxLen - 1));
 }
 
-export function ProjectView({ projects, selectedIndex, onSelect, onEnter, onDelete }: ProjectViewProps) {
+export function ProjectView({ projects, selectedIndex, source, onSelect, onEnter, onDelete }: ProjectViewProps) {
   const { stdout } = useStdout();
   const termWidth = stdout?.columns || 100;
 
@@ -49,7 +50,10 @@ export function ProjectView({ projects, selectedIndex, onSelect, onEnter, onDele
   return (
     <Box flexDirection="column">
       <Box borderStyle="round" borderColor="cyan" flexDirection="column" paddingX={1}>
-        <Text color="cyan" bold> CSM - Session Manager </Text>
+        <Box>
+          <Text color="cyan" bold> CSM - Session Manager </Text>
+          <Text color={source === 'codex' ? 'yellow' : 'green'}>[{source === 'codex' ? 'Codex' : 'Claude'}]</Text>
+        </Box>
 
         {/* Header */}
         <Box>

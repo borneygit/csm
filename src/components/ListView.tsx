@@ -10,6 +10,7 @@ interface ListViewProps {
   isFilterActive: boolean;
   selectedIds: Set<string>;
   projectPath: string;
+  source: 'claude' | 'codex';
   onSelect: (index: number) => void;
   onEnter: () => void;
   onBack: () => void;
@@ -69,7 +70,7 @@ function formatSize(bytes: number): string {
 }
 
 function formatTokens(n: number): string {
-  if (n === 0) return '  -  ';
+  if (n === 0) return '    -';
   if (n < 1000) return String(n).padStart(5);
   return `${(n / 1000).toFixed(1)}k`.padStart(5);
 }
@@ -90,6 +91,7 @@ export function ListView({
   onFilterToggle,
   onSelectionToggle,
   onClearFilter,
+  source,
 }: ListViewProps) {
   const { stdout } = useStdout();
   const termWidth = stdout?.columns || 100;
@@ -161,11 +163,13 @@ export function ListView({
         <Box>
           <Text color="cyan" bold> CSM - Sessions: </Text>
           <Text color="white">{projectPath.replace(/^\/Users\/[^/]+/, '~')}</Text>
+          <Text color={source === 'codex' ? 'yellow' : 'green'}> [{source === 'codex' ? 'Codex' : 'Claude'}]</Text>
         </Box>
 
         {/* Header */}
         <Box>
           <Text color="gray" bold>{'  # '}</Text>
+          {isFilterActive && <Text color="gray" bold>{'    '}</Text>}
           <Text color="gray" bold>{'│'}</Text>
           <Text color="gray" bold>{' ' + 'ID'.padEnd(idW) + ' '}</Text>
           <Text color="gray" bold>{'│'}</Text>
@@ -174,9 +178,9 @@ export function ListView({
           <Text color="gray" bold>{' ' + 'Date'.padEnd(10) + ' '}</Text>
           <Text color="gray" bold>{'│'}</Text>
           <Text color="gray" bold>{' ' + 'Msgs'.padStart(4) + ' │'}</Text>
-          <Text color="green" bold>{' ↑in   '}</Text>
+          <Text color="green" bold>{' ' + '↑in'.padStart(5) + ' '}</Text>
           <Text color="gray" bold>{'│'}</Text>
-          <Text color="yellow" bold>{' ↓out  '}</Text>
+          <Text color="yellow" bold>{' ' + '↓out'.padStart(5) + ' '}</Text>
         </Box>
         <Box>
           <Text color="gray">{'─'.repeat(termWidth - 4)}</Text>

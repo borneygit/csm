@@ -4,6 +4,7 @@ import type { SessionDetail } from '../types.ts';
 
 interface DetailViewProps {
   detail: SessionDetail;
+  source: 'claude' | 'codex';
   onBack: () => void;
   onDelete: () => void;
   onRename: (newSlug: string) => void;
@@ -20,7 +21,7 @@ function formatSize(bytes: number): string {
   return `${(bytes / 1024 / 1024).toFixed(1)}MB`;
 }
 
-export function DetailView({ detail, onBack, onDelete, onRename, onRenameModeChange }: DetailViewProps) {
+export function DetailView({ detail, source, onBack, onDelete, onRename, onRenameModeChange }: DetailViewProps) {
   const [isRenaming, setIsRenaming] = useState(false);
   const [renameText, setRenameText] = useState('');
 
@@ -72,6 +73,7 @@ export function DetailView({ detail, onBack, onDelete, onRename, onRenameModeCha
           ) : (
             <Text color="cyan" bold>{detail.slug}</Text>
           )}
+          <Text color={source === 'codex' ? 'yellow' : 'green'}> [{source === 'codex' ? 'Codex' : 'Claude'}]</Text>
         </Box>
 
         {/* Meta */}
