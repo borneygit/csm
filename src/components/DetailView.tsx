@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Text, useInput, useStdout } from 'ink';
+import Markdown from '@inkkit/ink-markdown';
 import type { SessionDetail } from '../types.ts';
 
 interface DetailViewProps {
@@ -162,7 +163,7 @@ export function DetailView({ detail, source, onBack, onDelete, onRename, onRenam
                       <Text color="cyan">{m.timestamp ? m.timestamp.slice(0, 16).replace('T', ' ') : ''}</Text>
                     </Box>
                     <Box paddingLeft={2}>
-                      <Text color="white" wrap="wrap">{m.content}</Text>
+                      <Markdown>{m.content}</Markdown>
                     </Box>
                   </Box>
                 );

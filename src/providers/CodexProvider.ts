@@ -26,7 +26,7 @@ function extractUuidFromFilename(filePath: string): string {
   const name = path.basename(filePath, '.jsonl');
   // rollout-<ISO>-<uuid> — UUID is the last segment after the last '-' that looks like a UUID
   const uuidMatch = name.match(/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i);
-  if (uuidMatch) return uuidMatch[1];
+  if (uuidMatch?.[1]) return uuidMatch[1];
   return name;
 }
 
