@@ -168,22 +168,22 @@ export function ListView({
 
         {/* Header */}
         <Box>
-          <Text color="gray" bold>{'  # '}</Text>
-          {isFilterActive && <Text color="gray" bold>{'    '}</Text>}
-          <Text color="gray" bold>{'│'}</Text>
-          <Text color="gray" bold>{' ' + 'ID'.padEnd(idW) + ' '}</Text>
-          <Text color="gray" bold>{'│'}</Text>
-          <Text color="gray" bold>{' ' + 'Slug'.padEnd(slugW) + ' '}</Text>
-          <Text color="gray" bold>{'│'}</Text>
-          <Text color="gray" bold>{' ' + 'Date'.padEnd(10) + ' '}</Text>
-          <Text color="gray" bold>{'│'}</Text>
-          <Text color="gray" bold>{' ' + 'Msgs'.padStart(4) + ' │'}</Text>
+          <Text color="white" bold>{'  # '}</Text>
+          {isFilterActive && <Text color="white" bold>{'    '}</Text>}
+          <Text color="white" bold>{'│'}</Text>
+          <Text color="white" bold>{' ' + 'ID'.padEnd(idW) + ' '}</Text>
+          <Text color="white" bold>{'│'}</Text>
+          <Text color="white" bold>{' ' + 'Slug'.padEnd(slugW) + ' '}</Text>
+          <Text color="white" bold>{'│'}</Text>
+          <Text color="white" bold>{' ' + 'Date'.padEnd(10) + ' '}</Text>
+          <Text color="white" bold>{'│'}</Text>
+          <Text color="white" bold>{' ' + 'Msgs'.padStart(4) + ' │'}</Text>
           <Text color="green" bold>{' ' + '↑in'.padStart(5) + ' '}</Text>
-          <Text color="gray" bold>{'│'}</Text>
+          <Text color="white" bold>{'│'}</Text>
           <Text color="yellow" bold>{' ' + '↓out'.padStart(5) + ' '}</Text>
         </Box>
         <Box>
-          <Text color="gray">{'─'.repeat(termWidth - 4)}</Text>
+          <Text color="whiteBright">{'─'.repeat(termWidth - 4)}</Text>
         </Box>
 
         {sessions.length === 0 ? (
@@ -205,41 +205,41 @@ export function ListView({
             return (
               <Box key={s.id || s.filePath} flexDirection="column">
               <Box>
-                <Text color={isSelected ? 'yellow' : 'gray'} bold={isSelected}>
+                <Text color={isSelected ? 'yellow' : 'whiteBright'} bold={isSelected}>
                   {isSelected ? '>' : ' '}{String(globalIdx + 1).padStart(2)}{' '}
                 </Text>
                 {isFilterActive && (
-                  <Text color={selectedIds.has(s.id) ? 'green' : 'gray'}>
+                  <Text color={selectedIds.has(s.id) ? 'green' : 'whiteBright'}>
                     {selectedIds.has(s.id) ? '[x] ' : '[ ] '}
                   </Text>
                 )}
-                <Text color="gray">{'│'}</Text>
-                <Text color={isSelected ? 'gray' : 'gray'} backgroundColor={bg}>
+                <Text color="whiteBright">{'│'}</Text>
+                <Text color={isSelected ? 'whiteBright' : 'cyan'} backgroundColor={bg}>
                   {' ' + s.id.slice(0, idW) + ' '}
                 </Text>
-                <Text color="gray">{'│'}</Text>
-                <Text color={fg} backgroundColor={bg}>
+                <Text color="whiteBright">{'│'}</Text>
+                <Text color={isSelected ? 'white' : 'white'} backgroundColor={bg}>
                   {' ' + truncate(s.slug, slugW) + ' '}
                 </Text>
-                <Text color="gray">{'│'}</Text>
-                <Text color={isSelected ? 'green' : 'white'} backgroundColor={bg}>
+                <Text color="whiteBright">{'│'}</Text>
+                <Text color={isSelected ? 'green' : 'green'} backgroundColor={bg}>
                   {' ' + formatDate(s.lastModified) + ' '}
                 </Text>
-                <Text color="gray">{'│'}</Text>
-                <Text color={isSelected ? 'yellow' : 'white'} backgroundColor={bg}>
+                <Text color="whiteBright">{'│'}</Text>
+                <Text color={isSelected ? 'yellow' : 'yellow'} backgroundColor={bg}>
                   {' ' + String(s.messageCount).padStart(4) + ' │'}
                 </Text>
                 <Text color={isSelected ? 'green' : 'green'} backgroundColor={bg}>
                   {' ' + formatTokens(s.inputTokens) + ' '}
                 </Text>
-                <Text color="gray">{'│'}</Text>
+                <Text color="whiteBright">{'│'}</Text>
                 <Text color={isSelected ? 'yellow' : 'yellow'} backgroundColor={bg}>
                   {' ' + formatTokens(s.outputTokens) + ' '}
                 </Text>
               </Box>
               {expandedIds.has(s.id) && preview ? (
                 <Box paddingLeft={4}>
-                  <Text color="gray">{preview}</Text>
+                  <Text color="whiteBright">{preview}</Text>
                 </Box>
               ) : null}
               </Box>

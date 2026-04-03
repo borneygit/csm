@@ -57,12 +57,12 @@ export function ProjectView({ projects, selectedIndex, source, onSelect, onEnter
 
         {/* Header */}
         <Box>
-          <Text color="gray" bold>{'  # │ '}</Text>
-          <Text color="gray" bold>{'Project'.padEnd(pathW)}</Text>
-          <Text color="gray" bold>{' │ ' + 'Sessions'.padStart(8) + ' │ ' + 'Size'.padStart(7) + ' │ Date'}</Text>
+          <Text color="white" bold>{'  # │ '}</Text>
+          <Text color="white" bold>{'Project'.padEnd(pathW)}</Text>
+          <Text color="white" bold>{' │ ' + 'Sessions'.padStart(8) + ' │ ' + 'Size'.padStart(7) + ' │ Date'}</Text>
         </Box>
         <Box>
-          <Text color="gray">{'─'.repeat(termWidth - 4)}</Text>
+          <Text color="whiteBright">{'─'.repeat(termWidth - 4)}</Text>
         </Box>
 
         {projects.length === 0 ? (
@@ -78,23 +78,23 @@ export function ProjectView({ projects, selectedIndex, source, onSelect, onEnter
 
             return (
               <Box key={p.path}>
-                <Text color={isSelected ? 'yellow' : 'gray'} bold={isSelected}>
+                <Text color={isSelected ? 'yellow' : 'whiteBright'} bold={isSelected}>
                   {isSelected ? '>' : ' '}{String(globalIdx + 1).padStart(2)}{' '}
                 </Text>
-                <Text color="gray">{'│ '}</Text>
-                <Text color={isSelected ? 'white' : 'white'} backgroundColor={bg}>
+                <Text color="whiteBright">{'│ '}</Text>
+                <Text color={isSelected ? 'white' : 'cyan'} backgroundColor={bg}>
                   {truncate(short, pathW)}
                 </Text>
-                <Text color="gray">{' │ '}</Text>
-                <Text color={isSelected ? 'yellow' : 'white'} backgroundColor={bg}>
+                <Text color="whiteBright">{' │ '}</Text>
+                <Text color={isSelected ? 'yellow' : 'yellow'} backgroundColor={bg}>
                   {String(p.sessionCount).padStart(8)}
                 </Text>
-                <Text color="gray">{' │ '}</Text>
-                <Text color={isSelected ? 'magenta' : 'gray'} backgroundColor={bg}>
+                <Text color="whiteBright">{' │ '}</Text>
+                <Text color={isSelected ? 'magenta' : 'magenta'} backgroundColor={bg}>
                   {formatSize(p.totalSize).padStart(7)}
                 </Text>
-                <Text color="gray">{' │ '}</Text>
-                <Text color={isSelected ? 'green' : 'white'} backgroundColor={bg}>
+                <Text color="whiteBright">{' │ '}</Text>
+                <Text color={isSelected ? 'green' : 'green'} backgroundColor={bg}>
                   {formatDate(p.lastModified)}
                 </Text>
               </Box>

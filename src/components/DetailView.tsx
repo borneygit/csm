@@ -79,65 +79,65 @@ export function DetailView({ detail, source, onBack, onDelete, onRename, onRenam
 
         {/* Meta */}
         <Box marginTop={0}>
-          <Text color="gray">ID:       </Text>
-          <Text color="gray">{detail.id}</Text>
+          <Text color="white" bold>ID:       </Text>
+          <Text color="cyan">{detail.id}</Text>
         </Box>
         <Box>
-          <Text color="gray">Project:  </Text>
-          <Text color="white">{proj}</Text>
+          <Text color="white" bold>Project:  </Text>
+          <Text color="cyan">{proj}</Text>
         </Box>
         <Box>
-          <Text color="gray">Date:     </Text>
+          <Text color="white" bold>Date:     </Text>
           <Text color="green">{formatDate(detail.lastModified)}</Text>
-          <Text color="gray">  │  Messages: </Text>
+          <Text color="white" bold>  │  Messages: </Text>
           <Text color="yellow">{detail.messageCount}</Text>
-          <Text color="gray">  │  Size: </Text>
+          <Text color="white" bold>  │  Size: </Text>
           <Text color="magenta">{formatSize(detail.fileSize)}</Text>
         </Box>
         <Box>
-          <Text color="gray">Tokens:   </Text>
+          <Text color="white" bold>Tokens:   </Text>
           <Text color="green">↑ {detail.inputTokens.toLocaleString()}</Text>
-          <Text color="gray"> in  </Text>
+          <Text color="white" bold> in  </Text>
           <Text color="blue">↓ {detail.outputTokens.toLocaleString()}</Text>
-          <Text color="gray"> out  </Text>
+          <Text color="white" bold> out  </Text>
           <Text color="yellow">∑ {(detail.inputTokens + detail.outputTokens).toLocaleString()}</Text>
-          <Text color="gray"> total</Text>
+          <Text color="white" bold> total</Text>
         </Box>
 
-        <Text color="gray">{'─'.repeat(termWidth)}</Text>
+        <Text color="whiteBright">{'─'.repeat(termWidth)}</Text>
 
         {/* Tool calls + Files changed */}
         <Box flexDirection="row">
           <Box flexDirection="column" width={halfW}>
-            <Text color="cyan" bold>TOOL CALLS</Text>
+            <Text color="white" bold>TOOL CALLS</Text>
             {toolEntries.length === 0 ? (
               <Text color="gray">  (none)</Text>
             ) : (
               toolEntries.map(([name, count]) => (
                 <Box key={name}>
-                  <Text color="white">  {name.padEnd(16)}</Text>
-                  <Text color="yellow">×{count}</Text>
+                  <Text color="cyan">  {name.padEnd(16)}</Text>
+                  <Text color="yellow" bold>×{count}</Text>
                 </Box>
               ))
             )}
           </Box>
 
           <Box flexDirection="column" paddingX={1}>
-            <Text color="gray">{'│'}</Text>
+            <Text color="whiteBright">{'│'}</Text>
             {Array.from({ length: Math.max(toolEntries.length, detail.filesChanged.length) }).map((_, i) => (
-              <Text key={i} color="gray">│</Text>
+              <Text key={i} color="whiteBright">│</Text>
             ))}
           </Box>
 
           <Box flexDirection="column" width={halfW}>
-            <Text color="cyan" bold>FILES CHANGED</Text>
+            <Text color="white" bold>FILES CHANGED</Text>
             {detail.filesChanged.length === 0 ? (
               <Text color="gray">  (none)</Text>
             ) : (
               detail.filesChanged.map((f, i) => {
                 const short = f.replace(/^\/Users\/[^/]+/, '~');
                 return (
-                  <Text key={i} color="white">  {short.slice(0, halfW - 2)}</Text>
+                  <Text key={i} color="cyan">  {short.slice(0, halfW - 2)}</Text>
                 );
               })
             )}
@@ -147,8 +147,8 @@ export function DetailView({ detail, source, onBack, onDelete, onRename, onRenam
         {/* Messages preview - hidden during rename */}
         {!isRenaming && (
           <>
-            <Text color="gray">{'─'.repeat(termWidth)}</Text>
-            <Text color="cyan" bold>MESSAGES PREVIEW</Text>
+            <Text color="whiteBright">{'─'.repeat(termWidth)}</Text>
+            <Text color="white" bold>MESSAGES PREVIEW</Text>
             {detail.messages.length === 0 ? (
               <Text color="gray">  (no messages)</Text>
             ) : (
@@ -159,8 +159,8 @@ export function DetailView({ detail, source, onBack, onDelete, onRename, onRenam
                   <Box key={i} flexDirection="column" marginBottom={0}>
                     <Box flexDirection="row">
                       <Text color={roleColor} bold>{roleLabel} </Text>
-                      <Text color="yellow">{m.tokens} tokens  </Text>
-                      <Text color="cyan">{m.timestamp ? m.timestamp.slice(0, 16).replace('T', ' ') : ''}</Text>
+                      <Text color="yellow" bold>{m.tokens} tokens  </Text>
+                      <Text color="whiteBright">{m.timestamp ? m.timestamp.slice(0, 16).replace('T', ' ') : ''}</Text>
                     </Box>
                     <Box paddingLeft={2}>
                       <Markdown>{m.content}</Markdown>

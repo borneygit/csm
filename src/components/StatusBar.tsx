@@ -43,15 +43,15 @@ export function StatusBar({ view, isFiltering, confirmDelete, isFilterActive, se
 
   if (view === 'projects') {
     return (
-      <Box borderStyle="single" borderColor="gray" paddingX={1}>
+      <Box borderStyle="single" borderColor="whiteBright" paddingX={1}>
         <Text color="cyan">[↑↓] </Text>
-        <Text>Navigate  </Text>
+        <Text color="white">Navigate  </Text>
         <Text color="cyan">[Enter] </Text>
-        <Text>Open  </Text>
+        <Text color="white">Open  </Text>
         <Text color="cyan">[d] </Text>
-        <Text>Delete  </Text>
+        <Text color="white">Delete  </Text>
         <Text color="cyan">[q/Esc] </Text>
-        <Text>Quit</Text>
+        <Text color="white">Quit</Text>
       </Box>
     );
   }
@@ -59,48 +59,48 @@ export function StatusBar({ view, isFiltering, confirmDelete, isFilterActive, se
   if (isFilterActive && view === 'list') {
     return (
       <Box borderStyle="single" borderColor="yellow" paddingX={1}>
-        <Text color="cyan">[↑↓] </Text><Text>Navigate  </Text>
-        <Text color="cyan">[Space] </Text><Text>Select  </Text>
+        <Text color="cyan">[↑↓] </Text><Text color="white">Navigate  </Text>
+        <Text color="cyan">[Space] </Text><Text color="white">Select  </Text>
         <Text color="cyan">[d] </Text>
-        <Text>{selectedCount ? `Delete (${selectedCount})  ` : 'Delete  '}</Text>
-        <Text color="cyan">[/] </Text><Text>Re-filter  </Text>
-        <Text color="cyan">[Esc] </Text><Text>Clear filter  </Text>
-        <Text color="cyan">[q] </Text><Text>Quit</Text>
+        <Text color="white">{selectedCount ? `Delete (${selectedCount})  ` : 'Delete  '}</Text>
+        <Text color="cyan">[/] </Text><Text color="white">Re-filter  </Text>
+        <Text color="cyan">[Esc] </Text><Text color="white">Clear filter  </Text>
+        <Text color="cyan">[q] </Text><Text color="white">Quit</Text>
       </Box>
     );
   }
 
   if (view === 'list') {
     return (
-      <Box borderStyle="single" borderColor="gray" paddingX={1}>
+      <Box borderStyle="single" borderColor="whiteBright" paddingX={1}>
         <Text color="cyan">[↑↓] </Text>
-        <Text>Navigate  </Text>
+        <Text color="white">Navigate  </Text>
         <Text color="cyan">[Enter] </Text>
-        <Text>Detail  </Text>
+        <Text color="white">Detail  </Text>
         <Text color="cyan">[d] </Text>
-        <Text>Delete  </Text>
+        <Text color="white">Delete  </Text>
         <Text color="cyan">[/] </Text>
-        <Text>Filter  </Text>
+        <Text color="white">Filter  </Text>
         <Text color="cyan">[Space] </Text>
-        <Text>Preview  </Text>
+        <Text color="white">Preview  </Text>
         <Text color="cyan">[Esc/b] </Text>
-        <Text>Back  </Text>
+        <Text color="white">Back  </Text>
         <Text color="cyan">[q] </Text>
-        <Text>Quit</Text>
+        <Text color="white">Quit</Text>
       </Box>
     );
   }
 
   return (
-    <Box borderStyle="single" borderColor="gray" paddingX={1}>
+    <Box borderStyle="single" borderColor="whiteBright" paddingX={1}>
       <Text color="cyan">[↑↓] </Text>
-      <Text>Scroll  </Text>
+      <Text color="white">Scroll  </Text>
       <Text color="cyan">[r] </Text>
-      <Text>Rename  </Text>
+      <Text color="white">Rename  </Text>
       <Text color="cyan">[d] </Text>
-      <Text>Delete  </Text>
+      <Text color="white">Delete  </Text>
       <Text color="cyan">[Esc/b] </Text>
-      <Text>Back</Text>
+      <Text color="white">Back</Text>
     </Box>
   );
 }
